@@ -136,8 +136,8 @@ workflows:
           mv /tmp/ct_unpack/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest"
           rm -f /tmp/ct.zip
 
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:\
-$ANDROID_HOME/platform-tools:$PATH"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:
+          $ANDROID_HOME/platform-tools:$PATH"
 
           # Some licence prompts require two passes to fully accept
           yes | sdkmanager --licenses 2>/dev/null || true
