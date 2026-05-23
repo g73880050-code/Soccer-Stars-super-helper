@@ -136,8 +136,7 @@ workflows:
           mv /tmp/ct_unpack/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest"
           rm -f /tmp/ct.zip
 
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:
-          $ANDROID_HOME/platform-tools:$PATH"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 
           # Some licence prompts require two passes to fully accept
           yes | sdkmanager --licenses 2>/dev/null || true
@@ -209,11 +208,7 @@ workflows:
         script: |
           set -euo pipefail
 
-          export PATH="\
-$ANDROID_HOME/cmdline-tools/latest/bin:\
-$ANDROID_HOME/platform-tools:\
-$ANDROID_HOME/build-tools/33.0.0:\
-$PATH"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/33.0.0:$PATH"
 
           python3 -m pythonforandroid.toolchain apk \
             \
@@ -226,11 +221,7 @@ $PATH"
             \
             `# ── Bootstrap & requirements ──────────────────────────────` \
             --bootstrap       sdl2 \
-            --requirements    "python3==3.11,\
-kivy==${KIVY_VERSION},\
-pyjnius,\
-numpy==${NUMPY_VERSION},\
-opencv" \
+            --requirements    "python3==3.11,kivy==${KIVY_VERSION},pyjnius,numpy==${NUMPY_VERSION},opencv" \
             \
             `# ── Custom recipes override: OpenCV uses prebuilt SDK ─────` \
             `# p4a checks ./p4a_recipes/ before its own built-in recipes.` \
@@ -339,8 +330,7 @@ opencv" \
           unzip -q /tmp/ct.zip -d /tmp/ct_unpack
           mv /tmp/ct_unpack/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest"
           rm -f /tmp/ct.zip
-          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:\
-$ANDROID_HOME/platform-tools:$PATH"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
           yes | sdkmanager --licenses 2>/dev/null || true
           yes | sdkmanager --licenses 2>/dev/null || true
           sdkmanager \
@@ -371,11 +361,7 @@ $ANDROID_HOME/platform-tools:$PATH"
       - name: "5 · Build release APK"
         script: |
           set -euo pipefail
-          export PATH="\
-$ANDROID_HOME/cmdline-tools/latest/bin:\
-$ANDROID_HOME/platform-tools:\
-$ANDROID_HOME/build-tools/33.0.0:\
-$PATH"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/33.0.0:$PATH"
 
           python3 -m pythonforandroid.toolchain apk \
             --private         ./ \
@@ -384,11 +370,7 @@ $PATH"
             --version         "1.0.0" \
             --numeric-version 1 \
             --bootstrap       sdl2 \
-            --requirements    "python3==3.11,\
-kivy==${KIVY_VERSION},\
-pyjnius,\
-numpy==${NUMPY_VERSION},\
-opencv" \
+            --requirements    "python3==3.11,kivy==${KIVY_VERSION},pyjnius,numpy==${NUMPY_VERSION},opencv" \
             --local-recipes   ./p4a_recipes \
             --wheels          ./wheels \
             --arch            arm64-v8a \
