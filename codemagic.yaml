@@ -51,7 +51,7 @@ workflows:
   # ═══════════════════════════════════════════════════════════════════════════
   android-debug:
     name: "Soccer Stars — Android Debug"
-    instance_type: linux
+    instance_type: mac_mini
     max_build_duration: 120   # minutes; opencv download+cv2 compile ≈ 20 min
 
     environment:
@@ -265,7 +265,7 @@ workflows:
   # ═══════════════════════════════════════════════════════════════════════════
   android-release:
     name: "Soccer Stars — Android Release (Signed)"
-    instance_type: linux
+    instance_type: mac_mini
     max_build_duration: 120
 
     environment:
