@@ -14,32 +14,40 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.soccerstars.analyzer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var overlayRunning  = false
-    private var autoDetect      = true
-    private var mpResultCode    = -1
+    private var overlayRunning = false
+    private var autoDetect     = true
+    private var mpResultCode   = -1
     private var mpResultData: Intent? = null
+
+    // -------------------------------------------------------------------------
+    // Broadcast receiver — service status updates
+    // -------------------------------------------------------------------------
 
     private val statusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val running = intent.getBooleanExtra(OverlayService.EXTRA_IS_RUNNING, false)
-            overlayRunning = running
+            overlayRunning = intent.getBooleanExtra(OverlayService.EXTRA_IS_RUNNING, false)
             updateUi()
         }
     }
+
+    // -------------------------------------------------------------------------
+    // Activity-result launchers
+    // -------------------------------------------------------------------------
 
     private val overlayPermLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (Settings.canDrawOverlays(this)) {
-            requestMediaProjection()
+            showMediaProjectionRationaleIfNeeded()
         } else {
-            toast("Overlay permission is required to show predictions.")
+            toast(getString(R.string.error_overlay_denied))
         }
     }
 
@@ -55,12 +63,15 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             mpResultCode = result.resultCode
             mpResultData = result.data
-            doStartOverlay()
         } else {
-            toast("Screen capture permission denied. Overlay will run without trajectory tracking.")
-            doStartOverlay()
+            toast(getString(R.string.error_capture_denied))
         }
+        doStartOverlay()
     }
+
+    // -------------------------------------------------------------------------
+    // Lifecycle
+    // -------------------------------------------------------------------------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +109,11 @@ class MainActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver)
     }
 
+    // -------------------------------------------------------------------------
+    // Permission chain:
+    //   POST_NOTIFICATIONS → SYSTEM_ALERT_WINDOW → MP rationale → MediaProjection
+    // -------------------------------------------------------------------------
+
     private fun checkPermissionsAndStart() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
@@ -112,18 +128,56 @@ class MainActivity : AppCompatActivity() {
     private fun requestOverlayPermIfNeeded() {
         if (!Settings.canDrawOverlays(this)) {
             overlayPermLauncher.launch(
-                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName"))
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
             )
         } else {
-            requestMediaProjection()
+            showMediaProjectionRationaleIfNeeded()
         }
     }
 
-    private fun requestMediaProjection() {
+    /**
+     * Shows a plain-language explanation of why screen capture is needed before
+     * the system's MediaProjection consent dialog appears.
+     *
+     * Shown once per install (persisted in SharedPreferences).
+     * The user may choose to "Skip Capture" and run the overlay without
+     * trajectory tracking — useful for players who do not want to grant
+     * screen-capture access.
+     */
+    private fun showMediaProjectionRationaleIfNeeded() {
+        val prefs = getSharedPreferences(PREFS_APP, MODE_PRIVATE)
+        if (prefs.getBoolean(KEY_MP_RATIONALE_SHOWN, false)) {
+            launchMediaProjection()
+            return
+        }
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_mp_title)
+            .setMessage(R.string.dialog_mp_message)
+            .setIcon(android.R.drawable.ic_menu_camera)
+            .setCancelable(false)
+            .setPositiveButton(R.string.dialog_mp_continue) { _, _ ->
+                prefs.edit().putBoolean(KEY_MP_RATIONALE_SHOWN, true).apply()
+                launchMediaProjection()
+            }
+            .setNegativeButton(R.string.dialog_mp_skip) { _, _ ->
+                prefs.edit().putBoolean(KEY_MP_RATIONALE_SHOWN, true).apply()
+                doStartOverlay()
+            }
+            .show()
+    }
+
+    private fun launchMediaProjection() {
         val mpm = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         mpLauncher.launch(mpm.createScreenCaptureIntent())
     }
+
+    // -------------------------------------------------------------------------
+    // Overlay service control
+    // -------------------------------------------------------------------------
 
     private fun doStartOverlay() {
         val intent = Intent(this, OverlayService::class.java).apply {
@@ -137,6 +191,10 @@ class MainActivity : AppCompatActivity() {
     private fun stopOverlay() {
         stopService(Intent(this, OverlayService::class.java))
     }
+
+    // -------------------------------------------------------------------------
+    // UI helpers
+    // -------------------------------------------------------------------------
 
     private fun updateUi() {
         if (overlayRunning) {
@@ -161,4 +219,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+
+    // -------------------------------------------------------------------------
+
+    companion object {
+        private const val PREFS_APP              = "app_prefs"
+        private const val KEY_MP_RATIONALE_SHOWN = "mp_rationale_shown"
+    }
 }

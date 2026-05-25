@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Soccer Stars Analyzer</string>
     <string name="title_hsv_tuner">HSV Colour Tuner</string>
+
+    <!-- Home screen buttons -->
     <string name="btn_start_overlay">Start Overlay</string>
     <string name="btn_stop_overlay">Stop Overlay</string>
     <string name="btn_auto_detect_on">Auto-detect: ON</string>
@@ -9,9 +11,21 @@
     <string name="btn_hsv_settings">HSV Colour Settings</string>
     <string name="status_template">Overlay: %1$s  |  Auto-detect: %2$s</string>
     <string name="instructions">1. Tap <b>Start Overlay</b> to launch the floating button.\n2. Switch to Soccer Stars — the overlay stays on screen.\n3. <b>Auto-detect</b> wakes the engine when your turn begins.\n4. Tap the floating button to show / hide the prediction line.\n5. Touch-and-hold the button to drag it to any screen edge.\n\nGrant SYSTEM_ALERT_WINDOW in Android Settings if prompted.</string>
+
+    <!-- HSV Tuner -->
     <string name="saved">Saved and applied.</string>
     <string name="ball_label">Ball (white / bright)</string>
     <string name="player_label">Active Player (blue disc)</string>
     <string name="btn_save">Save &amp; Apply</string>
     <string name="btn_reset">Reset Defaults</string>
+
+    <!-- MediaProjection rationale dialog -->
+    <string name="dialog_mp_title">Screen Capture Permission</string>
+    <string name="dialog_mp_message">Soccer Stars Analyzer needs to capture your screen in order to detect the ball and active player, then compute the shot trajectory in real time.\n\n\u2022 Frames are processed entirely on-device — no video is recorded and no images ever leave your phone.\n\u2022 Capture runs only while the overlay is active.\n\u2022 You can stop capture at any time by tapping Stop Overlay.\n\nTap <b>Continue</b> to grant access, or <b>Skip Capture</b> to run the overlay without trajectory tracking.</string>
+    <string name="dialog_mp_continue">Continue</string>
+    <string name="dialog_mp_skip">Skip Capture</string>
+
+    <!-- Error messages -->
+    <string name="error_overlay_denied">The \'Draw over other apps\' permission is required to show the prediction overlay.</string>
+    <string name="error_capture_denied">Screen capture declined. The overlay will run, but trajectory tracking requires capture access.</string>
 </resources>
