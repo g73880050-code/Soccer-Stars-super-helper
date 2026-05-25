@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Soccer Stars Analyzer</string>
+    <string name="title_hsv_tuner">HSV Colour Tuner</string>
+    <string name="btn_start_overlay">Start Overlay</string>
+    <string name="btn_stop_overlay">Stop Overlay</string>
+    <string name="btn_auto_detect_on">Auto-detect: ON</string>
+    <string name="btn_auto_detect_off">Auto-detect: OFF</string>
+    <string name="btn_hsv_settings">HSV Colour Settings</string>
+    <string name="status_template">Overlay: %1$s  |  Auto-detect: %2$s</string>
+    <string name="instructions">1. Tap <b>Start Overlay</b> to launch the floating button.\n2. Switch to Soccer Stars — the overlay stays on screen.\n3. <b>Auto-detect</b> wakes the engine when your turn begins.\n4. Tap the floating button to show / hide the prediction line.\n5. Touch-and-hold the button to drag it to any screen edge.\n\nGrant SYSTEM_ALERT_WINDOW in Android Settings if prompted.</string>
+    <string name="saved">Saved and applied.</string>
+    <string name="ball_label">Ball (white / bright)</string>
+    <string name="player_label">Active Player (blue disc)</string>
+    <string name="btn_save">Save &amp; Apply</string>
+    <string name="btn_reset">Reset Defaults</string>
+</resources>

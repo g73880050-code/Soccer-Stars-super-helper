@@ -1,0 +1,33 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android generated
+app/build/
+app/release/
+
+# Kotlin
+*.class
+
+# Gradle wrapper jar must stay in repo — do NOT gitignore it
+# gradle/wrapper/gradle-wrapper.jar
+
+# Signing keystores (keep private)
+*.jks
+*.keystore
+
+# Python artifacts (legacy — fully removed)
+__pycache__/
+*.pyc
+*.pyo
+.buildozer/
+bin/
+.p4a/
+hsv_prefs.json

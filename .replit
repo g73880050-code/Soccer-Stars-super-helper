@@ -22,13 +22,12 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python app.py"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
+args = "echo '=== Soccer Stars Analyzer — Native Android Project ===' && echo '' && echo 'Build  : Gradle 8.4 + AGP 8.2.2' && echo 'Lang   : Kotlin 1.9.22' && echo 'MinSDK : 26 (Android 8.0)' && echo 'Target : 34 (Android 14)' && echo 'OpenCV : org.opencv:opencv:4.9.0' && echo '' && echo 'Open in Android Studio or Google IDX, then:' && echo '  ./gradlew assembleDebug' && echo ''"
 
 [[ports]]
 localPort = 5000

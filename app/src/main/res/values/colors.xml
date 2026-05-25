@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_dark">#FF0A0E1A</color>
+    <color name="surface">#FF1A1F35</color>
+    <color name="border">#FF2D3748</color>
+    <color name="text_primary">#FFE2E8F0</color>
+    <color name="text_muted">#FF718096</color>
+    <color name="accent_blue">#FF2B6CB0</color>
+    <color name="accent_green">#FF2D7D46</color>
+    <color name="danger">#FFC53030</color>
+    <color name="accent_purple">#FF6B46C1</color>
+    <color name="grey">#FF616161</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Material theme required colors -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+</resources>
